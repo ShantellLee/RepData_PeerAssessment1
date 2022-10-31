@@ -30,7 +30,7 @@ steps_per_day <- aggregate(main_data$steps,
 ```
 
 #Creating a histogram
-```{r plot, echo= TRUE}
+```{r plot for steps, echo= TRUE}
 hist(steps_per_day$x, col = "green",
      breaks = 20, 
      main = "Total number of steps each day",
@@ -46,7 +46,7 @@ print (median_steps)
 ```
 ## 3. What is the average daily activity pattern?
 
-```{r plot, echo= TRUE}
+```{r plot for average, echo= TRUE}
 steps_per_interval<-aggregate(steps~interval, data=activityData, mean, 
                               na.rm=TRUE)
 plot(steps~interval, data=steps_per_interval, type="l", 
@@ -56,28 +56,28 @@ plot(steps~interval, data=steps_per_interval, type="l",
 ```
 
 # interval with the maximum number of steps
-```{r plot, echo= TRUE}
+```{r intervals, echo= TRUE}
 interval_with_max_steps <- steps_per_interval[which.max(steps_per_interval$steps),
                                            ]$interval
 interval_with_max_steps
 ```
 
 ## Imputing missing values 
-```{r, echo= TRUE}
+```{r missing values, echo= TRUE}
     #Calculating total NA
 total_values_missings <- sum(is.na(activityData$steps))
 total_values_missings
 ```
 
 # Strategy for filling in all missing values
-```{r, echo= TRUE}
+```{r filling missing values, echo= TRUE}
 get_mean_steps_per_interval<-function(interval){
   steps_per_interval[steps_per_interval$interval==interval,]$steps
 }
 ```
 
 # Create new data set
-```{r plot, echo= TRUE}
+```{r new data set, echo= TRUE}
 activityDataNoNA<-activityData
 for(i in 1:nrow(activityDataNoNA)){
   if(is.na(activityDataNoNA[i,]$steps)){
@@ -87,20 +87,20 @@ for(i in 1:nrow(activityDataNoNA)){
 ```
 
 # New dataset with no missing values 
-```{r plot, echo= TRUE}
+```{r plot total steps no missing, echo= TRUE}
 totalStepsPerDayNoNA <- aggregate(steps ~ date, data=activityDataNoNA, sum)
 hist(totalStepsPerDayNoNA$steps,
      main = "Total Steps Per Day:with no missing values")
 ```
 
 #Calculating the mean and median
-```{r plot, echo= TRUE}
+```{r mean and median for no missing, echo= TRUE}
 meanStepsPerDayNoNA <- mean(totalStepsPerDayNoNA$steps)
 medianStepsPerDayNoNA <- median(totalStepsPerDayNoNA$steps)
 ```
 
 ## 4. Are there differences in activity patterns between weekends and weekdays?
-```{r plot, echo= TRUE}
+```{r plot differences in activty, echo= TRUE}
 activityDataNoNA$date <- as.Date(strptime(activityDataNoNA$date, format="%Y-%m-%d"))
 activityDataNoNA$day <- weekdays(activityDataNoNA$date)
 for (i in 1:nrow(activityDataNoNA)) {
